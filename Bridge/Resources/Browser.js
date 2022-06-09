@@ -1,23 +1,16 @@
-﻿// @source Browser.js
-
-(function () {
-	if (!document) {
-		return;
-	}
-	
     var check = function (regex) {
-        return regex.test(navigator.userAgent);
+        return Bridge.global.navigator && regex.test(Bridge.global.navigator.userAgent.toLowerCase());
     },
 
-    isStrict = document.compatMode === "CSS1Compat",
+    isStrict = Bridge.global.document && Bridge.global.document.compatMode === "CSS1Compat",
 
     version = function (is, regex) {
         var m;
 
-        return (is && (m = regex.exec(navigator.userAgent))) ? parseFloat(m[1]) : 0;
+        return Bridge.global.navigator && (is && (m = regex.exec(navigator.userAgent.toLowerCase()))) ? parseFloat(m[1]) : 0;
     },
 
-    docMode = document.documentMode,
+    docMode = Bridge.global.document ? Bridge.global.document.documentMode : null,
     isOpera = check(/opera/),
     isOpera10_5 = isOpera && check(/version\/10\.5/),
     isChrome = check(/\bchrome\b/),
@@ -54,11 +47,11 @@
     safariVersion = version(isSafari, /version\/(\d+\.\d+)/),
     webKitVersion = version(isWebKit, /webkit\/(\d+\.\d+)/),
     isSecure = Bridge.global.location ? /^https/i.test(Bridge.global.location.protocol) : false,
-    isiPhone = /iPhone/i.test(navigator.platform),
-    isiPod = /iPod/i.test(navigator.platform),
-    isiPad = /iPad/i.test(navigator.userAgent),
-    isBlackberry = /Blackberry/i.test(navigator.userAgent),
-    isAndroid = /Android/i.test(navigator.userAgent),
+    isiPhone = Bridge.global.navigator && /iPhone/i.test(Bridge.global.navigator.platform),
+    isiPod = Bridge.global.navigator && /iPod/i.test(Bridge.global.navigator.platform),
+    isiPad = Bridge.global.navigator && /iPad/i.test(Bridge.global.navigator.userAgent),
+    isBlackberry = Bridge.global.navigator && /Blackberry/i.test(Bridge.global.navigator.userAgent),
+    isAndroid = Bridge.global.navigator && /Android/i.test(Bridge.global.navigator.userAgent),
     isDesktop = isMac || isWindows || (isLinux && !isAndroid),
     isTablet = isiPad,
     isPhone = !isDesktop && !isTablet;
@@ -127,4 +120,3 @@
     };
 
     Bridge.Browser = browser;
-})();
